@@ -1,0 +1,11 @@
+"questions1" :[
+    {"ques":"Pytanie 1 Runda 1", "ans1":"Odp1", "ans2":"Odp2", "ans3":"Odp3", "ans4":"Odp4", "ans5":"Odp5"},
+    {"ques":"Pytanie 2 Runda 1", "ans1":"Odp1", "ans2":"Odp2", "ans3":"Odp3", "ans4":"Odp4", "ans5":"Odp5"},
+    {"ques":"Pytanie 3 Runda 1", "ans1":"Odp1", "ans2":"Odp2", "ans3":"Odp3", "ans4":"Odp4", "ans5":"Odp5"}
+],
+
+"questions2" :[
+    {"ques":"Pytanie 1 Runda 2", "ans1":"Odp1", "ans2":"Odp2", "ans3":"Odp3", "ans4":"Odp4"},
+    {"ques":"Pytanie 2 Runda 2", "ans1":"Odp1", "ans2":"Odp2", "ans3":"Odp3", "ans4":"Odp4"},
+    {"ques":"Pytanie 3 Runda 2", "ans1":"Odp1", "ans2":"Odp2", "ans3":"Odp3", "ans4":"Odp4"}
+]
