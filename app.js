@@ -105,9 +105,44 @@ function loadJSON(callback) {
 function init() {
  loadJSON(function(response) {
   // Parse JSON string into object
-    var actual_JSON = JSON.parse(response);
+    var data = JSON.parse(response);
+//    console.log(data[0][0].ques);
  });
 }
+
+//init();
+
+function Data (ques, ans_0, ans_1, pts_0, pts_1) {
+    this.ques = ques;
+    this.ans_0 = ans_0;
+    this.ans_1 = ans_1;
+    this.pts_0 = pts_0;
+    this.pts_1 = pts_1;
+}
+//tablice quest [0, 1, 2]
+//tablica 2w answer[0][0], [0][1] ...
+//tablica 2w points j.w.
+
+var que = [];
+function loadData() {
+    que[0] = new Data('Przedmiot szkolny, który najmniej przydaje się w życiu?',
+             'Geografia', 'Kanapka', 9, 47);
+    que[1] = new Data('Więcej niż jedno zwierzę to?')
+}
+
+//loadData();
+
+
+//var items = [
+//  [1, 2],
+//  [3, 4],
+//  [5, 6]
+//];
+//items[0][0] = 2;
+//console.log(items[1][0]); // 1
+//console.log(items);
+
+
 
 //przyklad dzialania podwojnej tablicy
 //
