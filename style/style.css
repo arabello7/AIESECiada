@@ -62,31 +62,31 @@ body {
 /*    line-height: 0.5;*/
 }
 
-.answer-0 {
+.answer-1 {
     top: 60px;
     position: absolute;
     left: 20%;
 }
 
-.answer-1 {
+.answer-2 {
     top: 90px;
     position: absolute;
     left: 20%;
 }
 
-.answer-2 {
+.answer-3 {
     top: 120px;
     position: absolute;
     left: 20%;
 }
 
-.answer-3 {
+.answer-4 {
     top: 150px;
     position: absolute;
     left: 20%;
 }
 
-.answer-4 {
+.answer-5 {
     top: 180px;
     position: absolute;
     left: 20%;
@@ -134,27 +134,27 @@ body {
     white-space: pre;
 }
 
-.answer-points-0 {
+.answer-points-1 {
     top: 60px;
     position: absolute;
     right: 15%;
 }
-.answer-points-1 {
+.answer-points-2 {
     top: 90px;
     position: absolute;
     right: 15%;
 }
-.answer-points-2 {
+.answer-points-3 {
     top: 120px;
     position: absolute;
     right: 15%;
 }
-.answer-points-3 {
+.answer-points-4 {
     top: 150px;
     position: absolute;
     right: 15%;
 }
-.answer-points-4 {
+.answer-points-5 {
     top: 180px;
     position: absolute;
     right: 15%;

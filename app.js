@@ -1,16 +1,15 @@
 
 //WELCOME SCREEN
+//*potem do dodania do init
 document.querySelector('.welcome-text').style.display = 'none';
 
 for (var i = 0; i < 3; i++){
     document.querySelector('.wrong-0-' + i).style.display = 'none';
     document.querySelector('.wrong-1-' + i).style.display = 'none';
-    document.querySelector('.wrong-0-' + i).style.display = 'none';
-    document.querySelector('.wrong-1-' + i).style.display = 'none';
-    document.querySelector('#ans-pts-' +i).style.display = 'none';
 }
-document.querySelector('#ans-pts-3').style.display = 'none';
-document.querySelector('#ans-pts-4').style.display = 'none';
+for (var i = 1; i <= 5; i ++) {
+    document.querySelector('#ans-pts-' + i).style.display = 'block';
+}
 document.querySelector('#round-pts').style.display = 'none';
 
 
@@ -50,110 +49,71 @@ function updateRoundScore(points) {
     
 }*/
 
-// Show one of the answers (after correct or end of the round)
-function showAnwer (num) {
-    document.querySelector('#answer-' + num).textContent = 'Jedna z odpowiedzi'; 
-}
 
-var screenController = (function() {
-    
-    return {
-        //Show one answer
-        showOnScreen : function (queNum, ansNum) {
-            document.querySelector('#answer-' + ansNum).textContent = question[queNum][ansNum]; 
-        }
-    }
-})();
 
-var question = [];
-var questionController = (function() {
+//!!! WHERE THE FUN BEGINS
+
+// Dostępne z zewnatrz, potem mozna dodac getData w dataControllerze
+var data = [];
+
+// OBSLUGA CONSOLI
+var consoleController = (function() {
     
     return {
         //*pozniej raczej kontrola rundy = liczba odp
         
-        // Add new question from console
-        addQuestion : function (que, ans1, ans2, ans3) {
-            var queNum = question.length;
-            console.log(queNum);
-            question.push([]);
-            question[queNum].push(que,ans1,ans2,ans3);
+        // Wyswietla na konsoli pytanie i odpowiedzi
+        printAnswers : function (queNum) {
+            // Wyswietla pytanie
+            console.log(data[queNum].question);
+            
+            // Wyswietla wszystkie odpowiedzi do konsoli
+            var n = data[queNum].answers.length;
+            for (var i = 0; i < n; i++) {
+                 console.log(i + '. ' + data[queNum].answers[i]);
+            }
         },
         
-        // Show all questions
-        showQuestions : function () {
-            for (var i = 0; i < question.length; i++) {
-                console.log(question[i]);
-            }
+        //Wczytuje podana odpowiedz i przekazuje do wyswietlania
+        readAnswer : function (ansNum) {
+//               var ansNum = readline();
+//            console.log('Wczytano: ' + ansNum);
         }
     }
 })();
 
-function loadJSON(callback) {   
+// OBSLUGA BAZY DANYCH
+var dataController = (function () {
+    
+    // Obiekt do zapisu danych - pytania, odpowiedzi i punkty za nie
+    function Data (ques, ans, pts) {
+        this.question = ques;
+        this.answers = ans;
+        this.points = pts;
+    }
+    
+    return {
+        loadData : function () {
+            data[0] = new Data('Przedmiot szkolny, który najmniej przydaje się w życiu?', ['Geografia', 'Kanapka'], [9, 47]);
+            data[1] = new Data('Więcej niż jedno zwierzę to?', ['Owca', 'Lama'], [1, 99]);
+        }
+    }
+})();
+dataController.loadData();
 
-    var xobj = new XMLHttpRequest();
-    xobj.overrideMimeType("application/json");
-    xobj.open('GET', 'data.json', true); // Replace 'my_data' with the path to your file
-    xobj.onreadystatechange = function () {
-          if (xobj.readyState == 4 && xobj.status == "200") {
-            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-            callback(xobj.responseText);
-          }
-    };
-    xobj.send(null);  
- }
+// OBSLUGA EKRANU GRY
+var screenController = (function() {  
+    return {
+        //Show one answer, ansNum = [0..4]
+        putAnsOnScreen : function (queNum, ansNum) {
+            document.querySelector('#ans-' + ansNum).textContent = data[queNum].answers[ansNum];
+            document.querySelector('#ans-pts-' + ansNum).textContent = data[queNum].points[ansNum];
+        }
+    }
+})();
 
-function init() {
- loadJSON(function(response) {
-  // Parse JSON string into object
-    var data = JSON.parse(response);
-//    console.log(data[0][0].ques);
- });
-}
-
-//init();
-
-function Data (ques, ans_0, ans_1, pts_0, pts_1) {
-    this.ques = ques;
-    this.ans_0 = ans_0;
-    this.ans_1 = ans_1;
-    this.pts_0 = pts_0;
-    this.pts_1 = pts_1;
-}
-//tablice quest [0, 1, 2]
-//tablica 2w answer[0][0], [0][1] ...
-//tablica 2w points j.w.
-
-var que = [];
-function loadData() {
-    que[0] = new Data('Przedmiot szkolny, który najmniej przydaje się w życiu?',
-             'Geografia', 'Kanapka', 9, 47);
-    que[1] = new Data('Więcej niż jedno zwierzę to?')
-}
-
-//loadData();
-
-
-//var items = [
-//  [1, 2],
-//  [3, 4],
-//  [5, 6]
-//];
-//items[0][0] = 2;
-//console.log(items[1][0]); // 1
-//console.log(items);
-
-
-
-//przyklad dzialania podwojnej tablicy
-//
-//var que = [[]];
-//
-//que[0].push('pyt1', 'odp1','odp2', 'odp3');
-//que.push([]);
-//que[1].push('pyt2', 'odp1','odp2', 'odp3');
-//console.log(que[0][1]);
-
-
-
-
+//TO BEGIN
+consoleController.printAnswers(0);
+var i;
+consoleController.readAnswer(i);
 
