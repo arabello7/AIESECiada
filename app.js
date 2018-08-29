@@ -1,16 +1,16 @@
 
 //WELCOME SCREEN
 //*potem do dodania do init
-document.querySelector('.welcome-text').style.display = 'none';
-
-for (var i = 0; i < 3; i++){
-    document.querySelector('.wrong-0-' + i).style.display = 'none';
-    document.querySelector('.wrong-1-' + i).style.display = 'none';
-}
-for (var i = 1; i <= 5; i ++) {
-    document.querySelector('#ans-pts-' + i).style.display = 'block';
-}
-document.querySelector('#round-pts').style.display = 'none';
+//document.querySelector('.welcome-text').style.display = 'none';
+//
+//for (var i = 0; i < 3; i++){
+//    document.querySelector('.wrong-0-' + i).style.display = 'none';
+//    document.querySelector('.wrong-1-' + i).style.display = 'none';
+//}
+//for (var i = 0; i < 5; i ++) {
+//    document.querySelector('#ans-pts-' + i).style.display = 'block';
+//}
+//document.querySelector('#round-pts').style.display = 'none';
 
 
 //document.addEventListener('keypress', function(event) {
@@ -22,33 +22,16 @@ document.querySelector('#round-pts').style.display = 'none';
 
 //Funkcja przeliczajaca obecny errorPoints i w stosunku do tego i active playera wyswietla odpowiedni error
 
-function showErrors() {
-    var smallErr = '|   | \n \\/ \n /\\ \n|   |';
+function errorScore () {
+    var activeTeam = 0;
+    var teamErrCount = [];
+    var answer;
     
-    document.querySelector('.wrong-0-0').textContent = smallErr;
-    document.querySelector('.wrong-0-1').textContent = smallErr;
-    document.querySelector('.wrong-0-2').textContent = smallErr;
-    document.querySelector('.wrong-1-0').textContent = smallErr;
-    document.querySelector('.wrong-1-1').textContent = smallErr;
-    document.querySelector('.wrong-1-2').textContent = smallErr;
-}
-
-//Odswierzany po kazdej dobrej odpowiedzi
-function updateRoundScore(points) {
-    document.querySelector('#round-pts').textContent = 'SUM ' + points;
-}
-
-// BEGIN ROUND
-/*function init (){
-    document.querySelector('.welcome-text').style.display = 'none';
-    
-    for (var i = 0; i < 5; i++){
-           document.querySelector('#ans-pts-' +i).style.display = 'block';
+    if (answer === -1) {
+        teamErrCount[activeTeam]++;
     }
-    document.querySelector('#round-pts').style.display = 'block';
-    
-}*/
-
+    screenController.showOneError(activeTeam,teamErrCount);
+}
 
 
 //!!! WHERE THE FUN BEGINS
@@ -76,8 +59,7 @@ var consoleController = (function() {
         
         //Wczytuje podana odpowiedz i przekazuje do wyswietlania
         readAnswer : function (ansNum) {
-//               var ansNum = readline();
-//            console.log('Wczytano: ' + ansNum);
+            //
         }
     }
 })();
@@ -104,16 +86,59 @@ dataController.loadData();
 // OBSLUGA EKRANU GRY
 var screenController = (function() {  
     return {
+        
         //Show one answer, ansNum = [0..4]
         putAnsOnScreen : function (queNum, ansNum) {
             document.querySelector('#ans-' + ansNum).textContent = data[queNum].answers[ansNum];
             document.querySelector('#ans-pts-' + ansNum).textContent = data[queNum].points[ansNum];
+        },
+        resetRound : function () {
+            
+            // not needed to execute every round - can be moved
+            document.querySelector('.welcome-text').style.display = 'none';
+
+            for (var i = 0; i < 3; i++){
+                document.querySelector('.wrong-0-' + i).style.display = 'none';
+                document.querySelector('.wrong-1-' + i).style.display = 'none';
+            }
+
+            for (var i = 0; i < 5; i ++) {
+                document.querySelector('#ans-pts-' + i).textContent = 0;
+                document.querySelector('#ans-pts-' + i).style.display = 'block';
+            }
+            
+            document.querySelector('#round-pts').textContent = 'SUM 0';
+            document.querySelector('#round-pts').style.display = 'block';
+        },
+        // Shows just FAMILIADA text
+        welcomeText : function () {
+            document.querySelector('.welcome-text').style.display = 'block';
+            for (var i = 0; i < 5; i ++) {
+                document.querySelector('#ans-pts-' + i).style.display = 'none';
+            }
+        },
+        
+        //Odswierzany po kazdej dobrej odpowiedzi
+        updateRoundScore : function (points) {
+            document.querySelector('#round-pts').textContent = 'SUM ' + points;
+        },
+        
+        // Wyswietla pojedynczy blad
+        function showOneError (activeTeam, teamErrCount) {
+            var smallErr = '|   | \n \\/ \n /\\ \n|   |'; //byc moze potrzebne glob
+            document.querySelector('.wrong-' + activeTeam + '-' + teamErrCount).textContent = smallErr;
+            //w score ctrl teamErrCount[activeTeam]++;
         }
+
     }
 })();
 
 //TO BEGIN
-consoleController.printAnswers(0);
-var i;
-consoleController.readAnswer(i);
+//consoleController.printAnswers(0);
+//var i;
+//consoleController.readAnswer(i);
 
+
+// Shows just FAMILIADA text
+screenController.welcomeText();
+document.querySelector('.welcome-text').style.display = 'none'; //do testow
