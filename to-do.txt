@@ -2,21 +2,24 @@ SCREEEN CONTROLLER
 - wyświetlanie odpowiedzi
 - wyświetlanie punktów za odp
 - wyświetlanie małych x
-- wyświetlanie dużych X
 - ekran powitalny
 - wyświetlanie sumy pkt
 - resetowanie tablicy
 
 brak:
+- wyświetlanie dużych X
 - wyświetlanie pytania?
 - wyświetlanie aktywnej drużyny?
 
 
 CONSOLE CONTROLLER
 - wyswietlanie możliwych odpowiedzi
+- wczytywanie podanej odpowiedzi
+- spradzanie poprawności odpowiedzi
+- obsługa punków karnych małych
 
 brak:
-- wczytywanie podanej odpowiedzi!
+- obsługa błędów dużych
 
 
 DATA CONTROLLER
@@ -24,11 +27,13 @@ DATA CONTROLLER
 - odpowiedzi
 - punkty za odpowiedzi
 
-SCORE CONTROLLER?
-- obliczanie wskaźnika małych błędów drużyn
-"mechanika obsługi błędów dużych"
 
 brak:
 - obliczanie sumy punktów z rundy
 - obliczanie punktów obu drużyn
 - dodawanie punktów - obsługa końca rundy
+
+
+dodatkowo:
+- skalowalność elementów
+- dolny pulpit

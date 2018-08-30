@@ -33,14 +33,42 @@ function errorScore () {
     screenController.showOneError(activeTeam,teamErrCount);
 }
 
-
 //!!! WHERE THE FUN BEGINS
 
 // Dostępne z zewnatrz, potem mozna dodac getData w dataControllerze
 var data = [];
+var teamErrCount = [];
+// na wszelki
+teamErrCount[0] = 0;
+teamErrCount[1] = 0;
+var activeTeam = 0;
 
 // OBSLUGA CONSOLI
 var consoleController = (function() {
+    var roundScore = 0;
+    
+    // Wczytuje podana odpowiedz i przekazuje do wyswietlania
+    function readAnswer (queNum) {
+        
+        document.addEventListener('keypress', function(event) {
+                var input = document.querySelector('input[name="getAnswer"]');
+                if(event.keyCode === 13) {
+                    console.log('answer: ' + input.value);
+                    
+                    var ans = input.value;
+                    var scale = data[queNum].answers[i].length;
+                    
+                    if (ans === -1) {
+                        screenController.showOneError();
+                        teamErrCount[activeTeam]++;
+                    } else if (ans > scale - 1 || ans < -1) {
+                        console.log('Answer out of scale!');
+                    } else {
+                        screenController.putAnsOnScreen(0, input.value);
+                        screenController.updateRoundScore(roundScore + input.value);
+                    }
+                }
+            });
     
     return {
         //*pozniej raczej kontrola rundy = liczba odp
@@ -55,11 +83,7 @@ var consoleController = (function() {
             for (var i = 0; i < n; i++) {
                  console.log(i + '. ' + data[queNum].answers[i]);
             }
-        },
-        
-        //Wczytuje podana odpowiedz i przekazuje do wyswietlania
-        readAnswer : function (ansNum) {
-            //
+            readAnswer(queNum);
         }
     }
 })();
@@ -81,7 +105,7 @@ var dataController = (function () {
         }
     }
 })();
-dataController.loadData();
+
 
 // OBSLUGA EKRANU GRY
 var screenController = (function() {  
@@ -124,9 +148,9 @@ var screenController = (function() {
         },
         
         // Wyswietla pojedynczy blad
-        function showOneError (activeTeam, teamErrCount) {
+        showOneError : function () {
             var smallErr = '|   | \n \\/ \n /\\ \n|   |'; //byc moze potrzebne glob
-            document.querySelector('.wrong-' + activeTeam + '-' + teamErrCount).textContent = smallErr;
+            document.querySelector('.wrong-' + activeTeam + '-' + teamErrCount[activeTeam]).textContent = smallErr;
             //w score ctrl teamErrCount[activeTeam]++;
         }
 
@@ -139,6 +163,9 @@ var screenController = (function() {
 //consoleController.readAnswer(i);
 
 
-// Shows just FAMILIADA text
-screenController.welcomeText();
-document.querySelector('.welcome-text').style.display = 'none'; //do testow
+//// Shows just FAMILIADA text
+//dataController.loadData();
+//screenController.welcomeText();
+//document.querySelector('.welcome-text').style.display = 'none'; //do testow
+//screenController.resetRound();
+//consoleController.printAnswers(0);
