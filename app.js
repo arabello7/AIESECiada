@@ -50,26 +50,28 @@ var consoleController = (function() {
     // Wczytuje podana odpowiedz i przekazuje do wyswietlania
     function readAnswer (queNum) {
         
+        // czy to powinno byc ciagle aktywne??, mozna tylko max liczba razy + obsluga wyjscia po wygranej/przegranej
         document.addEventListener('keypress', function(event) {
                 var input = document.querySelector('input[name="getAnswer"]');
                 if(event.keyCode === 13) {
                     console.log('answer: ' + input.value);
                     
                     var ans = input.value;
-                    var scale = data[queNum].answers[i].length;
+                    var scale = data[queNum].answers.length;
                     
-                    if (ans === -1) {
+                    if (ans === '-1') {
                         screenController.showOneError();
+                        document.querySelector('.wrong-' + activeTeam + '-' + teamErrCount[activeTeam]).textContent = 'x';
                         teamErrCount[activeTeam]++;
                     } else if (ans > scale - 1 || ans < -1) {
-                        console.log('Answer out of scale!');
-                    } else {
+                        console.log('Answer out of scale! Repeat.');
+                    } else if (ans >= 0 && ans <= scale) {
                         screenController.putAnsOnScreen(0, input.value);
                         screenController.updateRoundScore(roundScore + input.value);
                     }
                 }
             });
-    
+    }
     return {
         //*pozniej raczej kontrola rundy = liczba odp
         
@@ -83,6 +85,8 @@ var consoleController = (function() {
             for (var i = 0; i < n; i++) {
                  console.log(i + '. ' + data[queNum].answers[i]);
             }
+            console.log('-1. Żadna z powyższych');
+            // Funkcja wczytująca pole tekstowe
             readAnswer(queNum);
         }
     }
@@ -121,9 +125,9 @@ var screenController = (function() {
             // not needed to execute every round - can be moved
             document.querySelector('.welcome-text').style.display = 'none';
 
-            for (var i = 0; i < 3; i++){
-                document.querySelector('.wrong-0-' + i).style.display = 'none';
-                document.querySelector('.wrong-1-' + i).style.display = 'none';
+            for (var i = 0; i < 3; i++){ //wczesniej bylo none
+                document.querySelector('.wrong-0-' + i).textContent = '';
+                document.querySelector('.wrong-1-' + i).textContent = '';
             }
 
             for (var i = 0; i < 5; i ++) {
@@ -150,6 +154,7 @@ var screenController = (function() {
         // Wyswietla pojedynczy blad
         showOneError : function () {
             var smallErr = '|   | \n \\/ \n /\\ \n|   |'; //byc moze potrzebne glob
+//            document.querySelector('.wrong-' + activeTeam + '-' + teamErrCount[activeTeam]).style.display = 'block';
             document.querySelector('.wrong-' + activeTeam + '-' + teamErrCount[activeTeam]).textContent = smallErr;
             //w score ctrl teamErrCount[activeTeam]++;
         }
@@ -163,9 +168,11 @@ var screenController = (function() {
 //consoleController.readAnswer(i);
 
 
-//// Shows just FAMILIADA text
-//dataController.loadData();
-//screenController.welcomeText();
-//document.querySelector('.welcome-text').style.display = 'none'; //do testow
-//screenController.resetRound();
-//consoleController.printAnswers(0);
+// Shows just FAMILIADA text
+function init () {
+    dataController.loadData();
+    screenController.welcomeText();
+    document.querySelector('.welcome-text').style.display = 'none'; //do testow
+    screenController.resetRound();
+    consoleController.printAnswers(0);
+}
