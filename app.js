@@ -1,44 +1,12 @@
 
-//WELCOME SCREEN
-//*potem do dodania do init
-//document.querySelector('.welcome-text').style.display = 'none';
-//
-//for (var i = 0; i < 3; i++){
-//    document.querySelector('.wrong-0-' + i).style.display = 'none';
-//    document.querySelector('.wrong-1-' + i).style.display = 'none';
-//}
-//for (var i = 0; i < 5; i ++) {
-//    document.querySelector('#ans-pts-' + i).style.display = 'block';
-//}
-//document.querySelector('#round-pts').style.display = 'none';
 
 
-//document.addEventListener('keypress', function(event) {
-//            if (event.keyCode === 32 || event.keyCode == 65) {
-//                console.log('space clicked');
-//                document.querySelector('#answer-0').textContent = 'Najlepsza odpowiedz';
-//            }
-//});
-
-//Funkcja przeliczajaca obecny errorPoints i w stosunku do tego i active playera wyswietla odpowiedni error
-
-function errorScore () {
-    var activeTeam = 0;
-    var teamErrCount = [];
-    var answer;
-    
-    if (answer === -1) {
-        teamErrCount[activeTeam]++;
-    }
-    screenController.showOneError(activeTeam,teamErrCount);
-}
 
 //!!! WHERE THE FUN BEGINS
 
 // Dostępne z zewnatrz, potem mozna dodac getData w dataControllerze
 var data = [];
 var teamErrCount = [];
-// na wszelki
 teamErrCount[0] = 0;
 teamErrCount[1] = 0;
 var activeTeam = 0;
@@ -46,6 +14,13 @@ var activeTeam = 0;
 // OBSLUGA CONSOLI
 var consoleController = (function() {
     var roundScore = 0;
+    
+    function changeTeam () {
+        // Errors condition
+        if (teamErrCount[activeTeam] > 3) { //4 może jako big error?
+            activeTeam === 0 ? activeTeam = 1 : activeTeam = 0;
+        }  
+    }
     
     // Wczytuje podana odpowiedz i przekazuje do wyswietlania
     function readAnswer (queNum) {
@@ -60,34 +35,35 @@ var consoleController = (function() {
                     var scale = data[queNum].answers.length;
                     
                     if (ans === '-1') {
+                        // After wrong answer
                         screenController.showOneError();
-                        document.querySelector('.wrong-' + activeTeam + '-' + teamErrCount[activeTeam]).textContent = 'x';
                         teamErrCount[activeTeam]++;
-                    } else if (ans > scale - 1 || ans < -1) {
-                        console.log('Answer out of scale! Repeat.');
+                        // Checks if should change the team
+                        changeTeam();
                     } else if (ans >= 0 && ans <= scale) {
+                        // After right answer
                         screenController.putAnsOnScreen(0, input.value);
                         screenController.updateRoundScore(roundScore + input.value);
+                    } else {
+                        // Catching error
+                        console.log('Answer out of scale! Repeat.');
                     }
                 }
             });
     }
     return {
-        //*pozniej raczej kontrola rundy = liczba odp
         
-        // Wyswietla na konsoli pytanie i odpowiedzi
+        // Printing question and answers in console
         printAnswers : function (queNum) {
-            // Wyswietla pytanie
             console.log(data[queNum].question);
             
-            // Wyswietla wszystkie odpowiedzi do konsoli
             var n = data[queNum].answers.length;
             for (var i = 0; i < n; i++) {
                  console.log(i + '. ' + data[queNum].answers[i]);
             }
             console.log('-1. Żadna z powyższych');
             // Funkcja wczytująca pole tekstowe
-            readAnswer(queNum);
+//            readAnswer(queNum); wylaczone w ramach testów
         }
     }
 })();
@@ -104,8 +80,8 @@ var dataController = (function () {
     
     return {
         loadData : function () {
-            data[0] = new Data('Przedmiot szkolny, który najmniej przydaje się w życiu?', ['Geografia', 'Kanapka'], [9, 47]);
-            data[1] = new Data('Więcej niż jedno zwierzę to?', ['Owca', 'Lama'], [1, 99]);
+            data[0] = new Data('Przedmiot szkolny, który najmniej przydaje się w życiu?', ['Kanapka', 'Geografia'], [47, 9]);
+            data[1] = new Data('Więcej niż jedno zwierzę to?', ['Lama', 'Owca'], [99, 1]);
         }
     }
 })();
@@ -153,26 +129,102 @@ var screenController = (function() {
         
         // Wyswietla pojedynczy blad
         showOneError : function () {
-            var smallErr = '|   | \n \\/ \n /\\ \n|   |'; //byc moze potrzebne glob
-//            document.querySelector('.wrong-' + activeTeam + '-' + teamErrCount[activeTeam]).style.display = 'block';
+            var smallErr = '|   | \n \\/ \n /\\ \n|   |';
             document.querySelector('.wrong-' + activeTeam + '-' + teamErrCount[activeTeam]).textContent = smallErr;
-            //w score ctrl teamErrCount[activeTeam]++;
         }
 
     }
 })();
 
-//TO BEGIN
-//consoleController.printAnswers(0);
-//var i;
-//consoleController.readAnswer(i);
-
-
-// Shows just FAMILIADA text
-function init () {
+// TO BEGIN
+//function init () {
     dataController.loadData();
     screenController.welcomeText();
     document.querySelector('.welcome-text').style.display = 'none'; //do testow
     screenController.resetRound();
+//    consoleController.printAnswers(0);
+//}
+
+
+//TESTING
+startRound();
+console.log('lets go');
+
+// Obsługa pulpitu zgłaszania się
+function startRound () {
+    // Team 0 wciska lewy ctrl
+    document.addEventListener('keypress', function(event) {
+        if(event.keyCode === 17) {
+            console.log('active:' + 0) ;
+            goon(); //umozliwia dalsza część
+        }
+    });
+
+    // Team 1 wciska strzalke w prawo
+    document.addEventListener('keypress', function(event) {
+        if(event.keyCode === 39) {
+            console.log('active:' + 1);
+            goon(); //umozliwia dalsza część
+        }  
+    });
+    console.log('startRound finished');
+}
+
+function readFirstAns () {
+    document.addEventListener('keypress', function(event) {
+                var input = document.querySelector('input[name="getAnswer"]');
+                if(event.keyCode === 13) {
+                    activeTeam = input.value;
+                    console.log('active team: ' + input.value);
+                }
+    });
+}
+    
+
+function goon() {
     consoleController.printAnswers(0);
+        
+    var readAnswer = function (queNum) { //możliwe że var x = function ()
+        var ans; //musi tu byc zeby dzialalo poza funkcja
+        document.addEventListener('keypress', function(event) {
+                var input = document.querySelector('input[name="getAnswer"]');
+                if(event.keyCode === 13) {
+                    console.log('answer: ' + input.value);
+                    ans = input.value; //zmienione
+                    var scale = data[queNum].answers.length;
+                    if (ans === '-1') {
+                        screenController.showOneError();
+                        teamErrCount[activeTeam]++;
+                        changeTeam();
+                    } else if (ans >= 0 && ans <= scale) {
+                        screenController.putAnsOnScreen(0, input.value);
+                        screenController.updateRoundScore(roundScore + input.value);
+                    } else {
+                        console.log('Answer out of scale! Repeat.');
+                    }
+                    goon2();
+                }
+                
+            });
+//        return data[queNum].points[ans];
+    }
+}
+
+function goon2 () {
+    var ansPoints = readAnswer(0);
+//       readAnswer(0); 
+        var firstAns = [];
+        firstAns[0] = 0;
+        firstAns[1] = 0;
+        
+    firstAns[activeTeam] = ansPoints;
+    activeTeam === 0 ? activeTeam = 1 : activeTeam = 0;
+    console.log('active team: ' + activeTeam);
+    ansPoints = readAnswer(0);
+    firstAns[activeTeam] = ansPoints;
+    if (firstAns[0] > firstAns[1]) activeTeam = 0;
+    else {
+        activeTeam = 1;
+    }
+    console.log('active team: ' + activeTeam);
 }
