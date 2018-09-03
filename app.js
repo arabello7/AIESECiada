@@ -22,36 +22,39 @@ var consoleController = (function() {
         }  
     }
     
-    // Wczytuje podana odpowiedz i przekazuje do wyswietlania
-    function readAnswer (queNum) {
-        
-        // czy to powinno byc ciagle aktywne??, mozna tylko max liczba razy + obsluga wyjscia po wygranej/przegranej
-        document.addEventListener('keypress', function(event) {
-                var input = document.querySelector('input[name="getAnswer"]');
-                if(event.keyCode === 13) {
-                    console.log('answer: ' + input.value);
-                    
-                    var ans = input.value;
-                    var scale = data[queNum].answers.length;
-                    
-                    if (ans === '-1') {
-                        // After wrong answer
-                        screenController.showOneError();
-                        teamErrCount[activeTeam]++;
-                        // Checks if should change the team
-                        changeTeam();
-                    } else if (ans >= 0 && ans <= scale) {
-                        // After right answer
-                        screenController.putAnsOnScreen(0, input.value);
-                        screenController.updateRoundScore(roundScore + input.value);
-                    } else {
-                        // Catching error
-                        console.log('Answer out of scale! Repeat.');
-                    }
-                }
-            });
-    }
     return {
+    // Wczytuje podana odpowiedz i przekazuje do wyswietlania
+        readAnswer : function (queNum, input) {
+
+            // czy to powinno byc ciagle aktywne??, mozna tylko max liczba razy + obsluga wyjscia po wygranej/przegranej
+//            var out = document.addEventListener('keypress', function(event) {
+//                    var input = document.querySelector('input[name="getAnswer"]');
+//                    if(event.keyCode === 13) {
+                        console.log('answer: ' + input);
+
+                        var ans = input;
+                        var scale = data[queNum].answers.length;
+
+                        if (ans === '-1') {
+                            // After wrong answer
+                            screenController.showOneError();
+                            teamErrCount[activeTeam]++;
+                            // Checks if should change the team
+                            changeTeam();
+                        } else if (ans >= 0 && ans <= scale) {
+                            // After right answer
+                            screenController.putAnsOnScreen(0, input);
+                            screenController.updateRoundScore(roundScore + input);
+                        } else {
+                            // Catching error
+                            console.log('Answer out of scale! Repeat.');
+                        }
+//                        return data[queNum].points[input.value];
+//                    }
+//                });
+            // Returned value to check higher points
+//            return out;
+        },
         
         // Printing question and answers in console
         printAnswers : function (queNum) {
@@ -63,7 +66,7 @@ var consoleController = (function() {
             }
             console.log('-1. Żadna z powyższych');
             // Funkcja wczytująca pole tekstowe
-//            readAnswer(queNum); wylaczone w ramach testów
+//            readAnswer(queNum); 
         }
     }
 })();
@@ -146,85 +149,97 @@ var screenController = (function() {
 //}
 
 
+//function roundOne () {
+//    //
+//}
+
+function roundTwo () {
+    // *usun jedno pole odpowiedzi
+    // *usun jeden przycisk odpowiedzi
+}
+
+
 //TESTING
-startRound();
-console.log('lets go');
 
 // Obsługa pulpitu zgłaszania się
-function startRound () {
-    // Team 0 wciska lewy ctrl
-    document.addEventListener('keypress', function(event) {
-        if(event.keyCode === 17) {
-            console.log('active:' + 0) ;
-            goon(); //umozliwia dalsza część
-        }
-    });
+//function startRound () {
+//    // Team 0 wciska lewy ctrl
+//    document.addEventListener('keypress', function(event) {
+//        if(event.keyCode === 17) {
+//            console.log('active:' + 0) ;
+//            goon(); //umozliwia dalsza część
+//        }
+//    });
+//
+//    // Team 1 wciska strzalke w prawo
+//    document.addEventListener('keypress', function(event) {
+//        if(event.keyCode === 39) {
+//            console.log('active:' + 1);
+//            goon(); //umozliwia dalsza część
+//        }  
+//    });
+//    console.log('startRound finished');
+//}
 
-    // Team 1 wciska strzalke w prawo
-    document.addEventListener('keypress', function(event) {
-        if(event.keyCode === 39) {
-            console.log('active:' + 1);
-            goon(); //umozliwia dalsza część
-        }  
-    });
-    console.log('startRound finished');
-}
-
-function readFirstAns () {
-    document.addEventListener('keypress', function(event) {
-                var input = document.querySelector('input[name="getAnswer"]');
-                if(event.keyCode === 13) {
-                    activeTeam = input.value;
-                    console.log('active team: ' + input.value);
-                }
-    });
-}
+//function readFirstAns () {
+//    document.addEventListener('keypress', function(event) {
+//                var input = document.querySelector('input[name="getAnswer"]');
+//                if(event.keyCode === 13) {
+//                    activeTeam = input.value;
+//                    console.log('active team: ' + input.value);
+//                }
+//    });
+//}
     
 
-function goon() {
-    consoleController.printAnswers(0);
-        
-    var readAnswer = function (queNum) { //możliwe że var x = function ()
-        var ans; //musi tu byc zeby dzialalo poza funkcja
-        document.addEventListener('keypress', function(event) {
-                var input = document.querySelector('input[name="getAnswer"]');
-                if(event.keyCode === 13) {
-                    console.log('answer: ' + input.value);
-                    ans = input.value; //zmienione
-                    var scale = data[queNum].answers.length;
-                    if (ans === '-1') {
-                        screenController.showOneError();
-                        teamErrCount[activeTeam]++;
-                        changeTeam();
-                    } else if (ans >= 0 && ans <= scale) {
-                        screenController.putAnsOnScreen(0, input.value);
-                        screenController.updateRoundScore(roundScore + input.value);
-                    } else {
-                        console.log('Answer out of scale! Repeat.');
-                    }
-                    goon2();
-                }
-                
-            });
-//        return data[queNum].points[ans];
-    }
+//TESTING
+var queNum = 0;
+// Wybór grającej drużyny, potem do ukrycia w odpowiednim kontrolerze
+var firstAns = [];
+firstAns[0] = 0;
+firstAns[1] = 0;
+
+console.log('active: ' + activeTeam);
+consoleController.printAnswers(queNum);
+//firstAns[activeTeam] = consoleController.readAnswer(queNum);
+//
+//activeTeam === 0 ? activeTeam = 1 : activeTeam = 0;
+//console.log('active: ' + activeTeam);
+//firstAns[activeTeam] = consoleController.readAnswer(queNum);
+//
+//
+////Wybór teamu, ktory zaczął z lepszą odpowiedzią
+//if (firstAns[0] > firstAns[1]) activeTeam = 0;
+//else activeTeam = 1;
+//
+//console.log('active: ' + activeTeam);
+//
+////consoleController.readAnswer(queNum);
+// Obsługa przycisku button roll po obu stronach
+
+roundOne();
+function roundOne () {
+    buttonsController();
+    
 }
 
-function goon2 () {
-    var ansPoints = readAnswer(0);
-//       readAnswer(0); 
-        var firstAns = [];
-        firstAns[0] = 0;
-        firstAns[1] = 0;
-        
-    firstAns[activeTeam] = ansPoints;
-    activeTeam === 0 ? activeTeam = 1 : activeTeam = 0;
-    console.log('active team: ' + activeTeam);
-    ansPoints = readAnswer(0);
-    firstAns[activeTeam] = ansPoints;
-    if (firstAns[0] > firstAns[1]) activeTeam = 0;
-    else {
-        activeTeam = 1;
-    }
-    console.log('active team: ' + activeTeam);
+function buttonsController(){
+    var pts;
+    document.querySelector('#btn-0').addEventListener('click', function() {
+    pts = consoleController.readAnswer(queNum,0);
+    document.querySelector('#btn-0').style.display = 'none';
+    });
+    
+    document.querySelector('#btn-1').addEventListener('click', function() {
+    pts = consoleController.readAnswer(queNum,1);
+    document.querySelector('#btn-1').style.display = 'none';
+    });
+
+    document.querySelector('#btn-4').addEventListener('click', function() {
+        consoleController.readAnswer(queNum,'-1');
+        pts = 0;
+    });
+    return pts;
 }
+
+

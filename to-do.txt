@@ -70,5 +70,5 @@ brak:
 dodatkowo:
 - skalowalność elementów
 - dolny pulpit
-- przycisk zgłoszenia się. może na klawiaturze? :D 
+- przycisk zgłoszenia się. może na klawiaturze? :D >:[] 
 - dźwięki https://www.soundboard.com/sb/Familiada#

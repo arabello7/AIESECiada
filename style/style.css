@@ -6,7 +6,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Familiada Regular;
+/*    font-family: Familiada Regular;*/
     color: #edc440;
 }
 
@@ -41,6 +41,7 @@ body {
     background-size: cover;
     background-position: center;
     position: relative;    
+    font-family: Familiada Regular;
 }
 
 .welcome-text {
@@ -166,79 +167,19 @@ body {
     right: 15%;
 }
 
-
-/*.budget {
-    position: absolute;
-    width: 350px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #fff;
-}
-
-.budget__title {
-    font-size: 18px;
-    text-align: center;
-    margin-bottom: 10px;
-    font-weight: 300;
-}
-
-.budget__value {
-    font-weight: 300;
-    font-size: 46px;
-    text-align: center;
-    margin-bottom: 25px;
-    letter-spacing: 2px;
-}
-
-.budget__income,
-.budget__expenses {
-    padding: 12px;
-    text-transform: uppercase;
-}
-
-.budget__income {
-    margin-bottom: 10px;
-    background-color: #28B9B5;
-}
-
-.budget__expenses {
-    background-color: #FF5049;
-}
-
-.budget__income--text,
-.budget__expenses--text {
-    float: left;
-    font-size: 13px;
-    color: #444;
-    margin-top: 2px;
-}
-
-.budget__income--value,
-.budget__expenses--value {
-    letter-spacing: 1px;
-    float: left;
-}
-
-.budget__income--percentage,
-.budget__expenses--percentage {
-    float: left;
-    width: 34px;
-    font-size: 11px;
-    padding: 3px 0;
-    margin-left: 10px;
-}
-
-.budget__expenses--percentage {
-    background-color: rgba(255, 255, 255, 0.2);
-    text-align: center;
-    border-radius: 3px;
-}
-
-
 /**********************************************
 *** BOTTOM PART
 **********************************************/
+
+.btn-group button {
+    left: 30%;
+    font-size: 20px;
+    font-size-adjust: auto;
+    padding: 10px 24px; 
+    cursor: pointer; 
+    width: 30%; 
+    display: block;
+}
 
 /***** FORM *****/
 .add {
