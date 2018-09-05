@@ -1,0 +1,61 @@
+ 1. Klikają zawodnicy na klawiaturze, wybiera activeTeam, wypisuje na consoli
+    * tutaj jest problem, bo wczytywanie dziala tak, ze w dowolnym momencie mozna wcisnac, nie da sie tego zatrzymac, realizuje sie kod po tej funkcji jezeli nie bedzie wcisniete
+
+2. Możliwe odpowiedzi się pojawiają na konsoli 
+3. Wczytanie odpowiedzi
+    a) Dobra 
+        - zapisuje firstAns[activeTeam] = score
+        - good.play()
+        - wyswietla poprawna odpowiedz i punkty
+        - dodaje score do roundScore i wyswietla go
+
+    b) Zla 
+        - zapisuje firstAns[activeTeam] = 0
+        - wrong.play()
+        - wyświetla duzy X ?
+4. Przełączenie teamu
+    a) Dobra (patrz 3a)
+    b) Zla (patrz 3b)
+5. Porównanie odpowiedzi
+    a) Obie zle
+        - zmienia team (ten co zaczynal)
+        ... funkcja na zmiane pytajaca teamy ...
+    b) W przec. wypadku
+        - wybiera wieksza wartosc
+        - zmienia team na ten z wieksza
+6. (jeśli 5b) Wczytuje dalszą odpowiedź teamu
+    - wyczyszczenie X
+    a) Dobra
+        - dodaje punkty do roundScore i wyswietla go
+        - good.play()
+        - wyswietla poprawna odp i pkt
+    b) Zla
+        - wrong.play()
+        - errorScore[active]++
+        - wyswietla maly x
+
+    *warunki stopu
+        i) errorScore[active] === 3
+            - zmienia activeTeam
+            m) Dobra
+                - good.play()
+                - wyswietla poprawna i roundScore
+                - teamPoints[active] += roundScore
+                - resetRound()
+            n) Zla
+                - wyswietla duzy X
+                - wrong.play()
+                - zmienia active
+                - teamPoints[active] += roundScore
+                - mozliwość wyświetlenia pozostałych odpowiedzi
+        j) *wszystkie odpowiedzi odgadnięte (w przeciwnym)
+            - teamPoints[active] = roundScore
+        - koniec_rundy.mp3
+        - resetRound(roundScore, teamErr)
+
+
+
+
+*jeżeli po 3 błędach druga drużyna zgadnie cokolwiek zgarnia całą pulę
+*jeżeli nie zgadnie, duży błąd, przeciwnicy dostają pkty
++ wskaźnik activeTeam na ekranie

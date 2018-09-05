@@ -19,6 +19,7 @@ CONSOLE CONTROLLER
 - spradzanie poprawności odpowiedzi
 - obsługa punków karnych małych
 - zmiana drużyny po 3 błędnych
+- obliczanie sumy punktów z rundy (dataCtr?)
 
 brak:
 - obsługa błędów dużych {
@@ -30,21 +31,7 @@ brak:
     po wyświetleniu pytania wczytuje activeTeam podany z klawiatury,
     jeżeli dobrze odp, to odpowiada drugi player, kto poda wyższą odpowiedź gra dalej
     {
-        1. klikają na klawiaturze, wybiera activeTeam, wypisuje na consoli
-        - tutaj jest problem, bo wczytywanie dziala tak, ze w dowolnym momencie mozna wcisnac, nie da sie tego zatrzymac, realizuje sie kod po tej funkcji jezeli nie bedzie wcisniete
-    
-        2. możliwe odpowiedzi się pojawiają 
-        3. Wczytanie poprawnej lub nie
-        4. Zapisuje pkt firstAns[activeTeam] = score, def=0
-        5. Zmienia activeTeam, wyświetla na consoli
-        6. Wczytuje odpowiedź, zapisuje firstAns[activeTeam] = score lub 0
-        7. Funkcja porównuje i wybiera team z większą odpowiedzią
-        
-        *jeżeli oboje nie odpowiedzą naprzemiennie pyta się kolejnych zawodników zaczynając od tego, który pierwszy kliknął
-        
-        *jeżeli po 3 błędach druga drużyna zgadnie cokolwiek zgarnia całą pulę
-        *jeżeli nie zgadnie, duży błąd, przeciwnicy dostają pkty
-        + wskaźnik activeTeam na ekranie
+       
     }
 }
 
@@ -55,20 +42,26 @@ DATA CONTROLLER
 
 
 brak:
-- obliczanie sumy punktów z rundy {
-    *po wywołaniu wczytywania odpowiedzi 
-    RoundScore += score[ans];
-    screen.ctr.updateRoundScore()
-}   
+
 - obliczanie punktów obu drużyn {
     var teamScore[]
     A. jeżeli roundScore = suma wszystkich pkt za odpowiedzi -> teamScore[] += roundScore
 }
 - dodawanie punktów - obsługa końca rundy
 
+AUDIO CONTROLLER
+- bledna odpowiedz
+
+brak:
+- intro
+- poprawna odpowiedz
+- koniec rundy/przerywnik
+- błąd
+
 
 dodatkowo:
+*nowe pytanie CountAns = 0;
 - skalowalność elementów
-- dolny pulpit
-- przycisk zgłoszenia się. może na klawiaturze? :D >:[] 
+- dolny pulpit: punkty drużyn, przyciski
+- przycisk zgłoszenia się. może na klawiaturze? :D >:( 
 - dźwięki https://www.soundboard.com/sb/Familiada#

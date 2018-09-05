@@ -1,7 +1,3 @@
-
-
-
-
 //!!! WHERE THE FUN BEGINS
 
 // Dostępne z zewnatrz, potem mozna dodac getData w dataControllerze
@@ -14,12 +10,23 @@ var activeTeam = 0;
 // OBSLUGA CONSOLI
 var consoleController = (function() {
     var roundScore = 0;
+    var firstAns = [];
+    firstAns[0] = 0; //na 2 runde wyzerowanie 
+    firstAns[1] = 0;
     
+    // Zmienia team po 3 blednych
     function changeTeam () {
         // Errors condition
         if (teamErrCount[activeTeam] > 3) { //4 może jako big error?
             activeTeam === 0 ? activeTeam = 1 : activeTeam = 0;
-        }  
+            return 1; //trigger do lastAns
+        }  //moze funkcja samo change team
+    }
+    
+    function chooseTeam () {
+        if (firstAns[0] > firstAns[1]) activeTeam = 0;
+        else activeTeam = 1;
+        //*jezeli obaj zle to ten co szybciej :/
     }
     
     return {
@@ -27,33 +34,44 @@ var consoleController = (function() {
         readAnswer : function (queNum, input) {
 
             // czy to powinno byc ciagle aktywne??, mozna tylko max liczba razy + obsluga wyjscia po wygranej/przegranej
-//            var out = document.addEventListener('keypress', function(event) {
-//                    var input = document.querySelector('input[name="getAnswer"]');
-//                    if(event.keyCode === 13) {
-                        console.log('answer: ' + input);
+            console.log('answer: ' + input);
 
-                        var ans = input;
-                        var scale = data[queNum].answers.length;
+            var ans = input;
+            var scale = data[queNum].answers.length;
 
-                        if (ans === '-1') {
-                            // After wrong answer
-                            screenController.showOneError();
-                            teamErrCount[activeTeam]++;
-                            // Checks if should change the team
-                            changeTeam();
-                        } else if (ans >= 0 && ans <= scale) {
-                            // After right answer
-                            screenController.putAnsOnScreen(0, input);
-                            screenController.updateRoundScore(roundScore + input);
-                        } else {
-                            // Catching error
-                            console.log('Answer out of scale! Repeat.');
-                        }
-//                        return data[queNum].points[input.value];
-//                    }
-//                });
+            if (ans === '-1') {
+                // After wrong answer
+                screenController.showOneError();
+                teamErrCount[activeTeam]++;
+                
+                // Jeśli tak to duzy blad
+                if (changeTeam === 1) {
+                    console.log('X');
+                }
+                // Checks if should change the team after 3x
+                changeTeam();
+            } else if (ans >= 0 && ans <= scale) {
+                // After right answer
+                audioController.playGood();
+                screenController.putAnsOnScreen(0, input);
+                roundScore += data[queNum].points[input];
+                screenController.updateRoundScore(roundScore);
+            } else {
+                // Catching error
+                console.log('Answer out of scale! Repeat.');
+            }
             // Returned value to check higher points
 //            return out;
+            
+            // Wybieranie teamu z lepsza odpowiedzia
+            //potem mozna to data[...] skrocic do zmiennej
+            if (countPress < 2) {
+                firstAns[activeTeam] = data[queNum].points[input];
+                activeTeam === 0 ? activeTeam = 1 : activeTeam = 0;
+                
+            } else if (countPress === 2) {
+                chooseTeam();
+            }
         },
         
         // Printing question and answers in console
@@ -83,7 +101,7 @@ var dataController = (function () {
     
     return {
         loadData : function () {
-            data[0] = new Data('Przedmiot szkolny, który najmniej przydaje się w życiu?', ['Kanapka', 'Geografia'], [47, 9]);
+            data[0] = new Data('Przedmiot szkolny, który najmniej przydaje się w życiu?', ['Kanapka', 'Piórnik','Olówek', 'Dziennik'], [47, 23, 15, 9]);
             data[1] = new Data('Więcej niż jedno zwierzę to?', ['Lama', 'Owca'], [99, 1]);
         }
     }
@@ -133,9 +151,31 @@ var screenController = (function() {
         // Wyswietla pojedynczy blad
         showOneError : function () {
             var smallErr = '|   | \n \\/ \n /\\ \n|   |';
+            audioController.playWrong();
             document.querySelector('.wrong-' + activeTeam + '-' + teamErrCount[activeTeam]).textContent = smallErr;
+        },
+        
+        // Big error
+        showBigError : function () {
+            var bigErr = '|\t|\n|\t|\n|\t|\n \\   /\n  |||\n /   \\ \n|\t|\n|\t|\n|\t|';
+//            audioController.playWrong();
+            document.querySelector('.wrong-' + activeTeam + '-1').textContent = bigErr;
         }
+    }
+})();
 
+
+var audioController = (function() {
+    var wrong = new Audio('sounds/wrong.mp3');
+    var good = new Audio('sounds/good.mp3') 
+    
+    return {
+        playWrong : function() {
+            wrong.play();
+        },
+        playGood : function() {
+            good.play();
+        }
     }
 })();
 
@@ -148,98 +188,45 @@ var screenController = (function() {
 //    consoleController.printAnswers(0);
 //}
 
-
 //function roundOne () {
 //    //
 //}
 
-function roundTwo () {
-    // *usun jedno pole odpowiedzi
-    // *usun jeden przycisk odpowiedzi
-}
-
-
-//TESTING
-
-// Obsługa pulpitu zgłaszania się
-//function startRound () {
-//    // Team 0 wciska lewy ctrl
-//    document.addEventListener('keypress', function(event) {
-//        if(event.keyCode === 17) {
-//            console.log('active:' + 0) ;
-//            goon(); //umozliwia dalsza część
-//        }
-//    });
-//
-//    // Team 1 wciska strzalke w prawo
-//    document.addEventListener('keypress', function(event) {
-//        if(event.keyCode === 39) {
-//            console.log('active:' + 1);
-//            goon(); //umozliwia dalsza część
-//        }  
-//    });
-//    console.log('startRound finished');
-//}
-
-//function readFirstAns () {
-//    document.addEventListener('keypress', function(event) {
-//                var input = document.querySelector('input[name="getAnswer"]');
-//                if(event.keyCode === 13) {
-//                    activeTeam = input.value;
-//                    console.log('active team: ' + input.value);
-//                }
-//    });
-//}
-    
-
 //TESTING
 var queNum = 0;
-// Wybór grającej drużyny, potem do ukrycia w odpowiednim kontrolerze
-var firstAns = [];
-firstAns[0] = 0;
-firstAns[1] = 0;
-
 console.log('active: ' + activeTeam);
 consoleController.printAnswers(queNum);
-//firstAns[activeTeam] = consoleController.readAnswer(queNum);
-//
-//activeTeam === 0 ? activeTeam = 1 : activeTeam = 0;
-//console.log('active: ' + activeTeam);
-//firstAns[activeTeam] = consoleController.readAnswer(queNum);
-//
-//
-////Wybór teamu, ktory zaczął z lepszą odpowiedzią
-//if (firstAns[0] > firstAns[1]) activeTeam = 0;
-//else activeTeam = 1;
-//
-//console.log('active: ' + activeTeam);
-//
-////consoleController.readAnswer(queNum);
-// Obsługa przycisku button roll po obu stronach
 
-roundOne();
-function roundOne () {
-    buttonsController();
-    
-}
-
+var countPress = 0;
+buttonsController();
 function buttonsController(){
-    var pts;
+    
     document.querySelector('#btn-0').addEventListener('click', function() {
-    pts = consoleController.readAnswer(queNum,0);
+    countPress++;
+    consoleController.readAnswer(queNum,0);
     document.querySelector('#btn-0').style.display = 'none';
     });
     
     document.querySelector('#btn-1').addEventListener('click', function() {
-    pts = consoleController.readAnswer(queNum,1);
+    countPress++;
+    consoleController.readAnswer(queNum,1); 
     document.querySelector('#btn-1').style.display = 'none';
+    });
+    
+    document.querySelector('#btn-2').addEventListener('click', function() {
+    countPress++;
+    consoleController.readAnswer(queNum,2); 
+    document.querySelector('#btn-2').style.display = 'none';
+    });
+    
+    document.querySelector('#btn-3').addEventListener('click', function() {
+    countPress++;
+    consoleController.readAnswer(queNum,3); 
+    document.querySelector('#btn-3').style.display = 'none';
     });
 
     document.querySelector('#btn-4').addEventListener('click', function() {
+        countPress++;
         consoleController.readAnswer(queNum,'-1');
-        pts = 0;
     });
-    return pts;
 }
-
-
