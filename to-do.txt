@@ -1,4 +1,4 @@
-SCREEEN CONTROLLER
+﻿SCREEEN CONTROLLER
 - wyświetlanie odpowiedzi
 - wyświetlanie punktów za odp
 - wyświetlanie małych x
