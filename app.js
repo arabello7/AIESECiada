@@ -6,6 +6,15 @@ var teamErrCount = [];
 teamErrCount[0] = 0;
 teamErrCount[1] = 0;
 var activeTeam = 0;
+var teamPoints = [];
+teamPoints[0] = 0;
+teamPoints[1] = 0;
+var queNum = 0;
+var countPress = 0;
+
+function switchTeam () {
+    activeTeam === 0 ? activeTeam = 1 : activeTeam = 0;
+}
 
 // OBSLUGA CONSOLI
 var consoleController = (function() {
@@ -17,8 +26,8 @@ var consoleController = (function() {
     // Zmienia team po 3 blednych
     function changeTeam () {
         // Errors condition
-        if (teamErrCount[activeTeam] > 3) { //4 może jako big error?
-            activeTeam === 0 ? activeTeam = 1 : activeTeam = 0;
+        if (teamErrCount[activeTeam] >= 3) { //4 może jako big error?
+            switchTeam();
             return 1; //trigger do lastAns
         }  //moze funkcja samo change team
     }
@@ -32,46 +41,60 @@ var consoleController = (function() {
     return {
     // Wczytuje podana odpowiedz i przekazuje do wyswietlania
         readAnswer : function (queNum, input) {
-
             // czy to powinno byc ciagle aktywne??, mozna tylko max liczba razy + obsluga wyjscia po wygranej/przegranej
             console.log('answer: ' + input);
 
             var ans = input;
             var scale = data[queNum].answers.length;
-
+            
             if (ans === '-1') {
                 // After wrong answer
                 screenController.showOneError();
                 teamErrCount[activeTeam]++;
-                
-                // Jeśli tak to duzy blad
-                if (changeTeam === 1) {
-                    console.log('X');
+                // Last answer is incorrect
+                if (countPress > 99) {
+                    switchTeam();
+                    console.log('wygrana teamu' + activeTeam);
+                    teamPoints[activeTeam] += roundScore;
+                    audioController.playJoke();
                 }
-                // Checks if should change the team after 3x
-                changeTeam();
+                
+                // Triggers last answer condition
+                if (changeTeam() === 1) {
+                    //zmiana teamErrCount, potem do wyswietlania X
+                    countPress = 99;
+                }
+                
             } else if (ans >= 0 && ans <= scale) {
                 // After right answer
                 audioController.playGood();
                 screenController.putAnsOnScreen(0, input);
                 roundScore += data[queNum].points[input];
                 screenController.updateRoundScore(roundScore);
+                // Last answer is correct
+                if (countPress > 99) {
+                    console.log('wygrana teamu ' + activeTeam);
+                    teamPoints[activeTeam] += roundScore;
+                    audioController.playJoke();
+                }
             } else {
                 // Catching error
                 console.log('Answer out of scale! Repeat.');
             }
-            // Returned value to check higher points
-//            return out;
             
             // Wybieranie teamu z lepsza odpowiedzia
             //potem mozna to data[...] skrocic do zmiennej
             if (countPress < 2) {
                 firstAns[activeTeam] = data[queNum].points[input];
-                activeTeam === 0 ? activeTeam = 1 : activeTeam = 0;
+                switchTeam();
                 
             } else if (countPress === 2) {
+                firstAns[activeTeam] = data[queNum].points[input];
+                //*moze jakies opoznienie do tego potem
+                screenController.resetErrors();
                 chooseTeam();
-            }
+                console.log('active: ' + activeTeam);
+            } 
         },
         
         // Printing question and answers in console
@@ -160,6 +183,11 @@ var screenController = (function() {
             var bigErr = '|\t|\n|\t|\n|\t|\n \\   /\n  |||\n /   \\ \n|\t|\n|\t|\n|\t|';
 //            audioController.playWrong();
             document.querySelector('.wrong-' + activeTeam + '-1').textContent = bigErr;
+        },
+        // Used after beginning of round, potem raczej duże X
+        resetErrors : function () {
+            document.querySelector('.wrong-0-0').textContent = "";
+            document.querySelector('.wrong-1-0').textContent = "";
         }
     }
 })();
@@ -167,7 +195,8 @@ var screenController = (function() {
 
 var audioController = (function() {
     var wrong = new Audio('sounds/wrong.mp3');
-    var good = new Audio('sounds/good.mp3') 
+    var good = new Audio('sounds/good.mp3');
+    var joke = new Audio('sounds/zart1.mp3');
     
     return {
         playWrong : function() {
@@ -175,9 +204,37 @@ var audioController = (function() {
         },
         playGood : function() {
             good.play();
+        },
+        playJoke : function() {
+            joke.play();
         }
     }
 })();
+
+// Answer buttons handling
+document.querySelector('#btn-0').addEventListener('click', function(){
+    answerButton(0);
+});
+document.querySelector('#btn-1').addEventListener('click', function(){
+    answerButton(1);
+});
+document.querySelector('#btn-2').addEventListener('click', function(){
+    answerButton(2);
+});
+document.querySelector('#btn-3').addEventListener('click', function(){
+    answerButton(3);
+});
+document.querySelector('#btn-4').addEventListener('click', function() {
+    countPress++;
+    consoleController.readAnswer(queNum,'-1');
+});
+
+// Function executed after clicking button
+function answerButton (num){
+    countPress++;
+    consoleController.readAnswer(queNum, num); 
+    document.querySelector('#btn-' + num).style.display = 'none';
+}
 
 // TO BEGIN
 //function init () {
@@ -193,40 +250,10 @@ var audioController = (function() {
 //}
 
 //TESTING
-var queNum = 0;
 console.log('active: ' + activeTeam);
 consoleController.printAnswers(queNum);
 
-var countPress = 0;
-buttonsController();
-function buttonsController(){
-    
-    document.querySelector('#btn-0').addEventListener('click', function() {
-    countPress++;
-    consoleController.readAnswer(queNum,0);
-    document.querySelector('#btn-0').style.display = 'none';
-    });
-    
-    document.querySelector('#btn-1').addEventListener('click', function() {
-    countPress++;
-    consoleController.readAnswer(queNum,1); 
-    document.querySelector('#btn-1').style.display = 'none';
-    });
-    
-    document.querySelector('#btn-2').addEventListener('click', function() {
-    countPress++;
-    consoleController.readAnswer(queNum,2); 
-    document.querySelector('#btn-2').style.display = 'none';
-    });
-    
-    document.querySelector('#btn-3').addEventListener('click', function() {
-    countPress++;
-    consoleController.readAnswer(queNum,3); 
-    document.querySelector('#btn-3').style.display = 'none';
-    });
-
-    document.querySelector('#btn-4').addEventListener('click', function() {
-        countPress++;
-        consoleController.readAnswer(queNum,'-1');
-    });
+function showPoints () {
+    console.log('Team 0: ' + teamPoints[0]);
+    console.log('Team 1: ' + teamPoints[1]);
 }

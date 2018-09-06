@@ -1,19 +1,19 @@
  1. Klikają zawodnicy na klawiaturze, wybiera activeTeam, wypisuje na consoli
     * tutaj jest problem, bo wczytywanie dziala tak, ze w dowolnym momencie mozna wcisnac, nie da sie tego zatrzymac, realizuje sie kod po tej funkcji jezeli nie bedzie wcisniete
 
-2. Możliwe odpowiedzi się pojawiają na konsoli 
-3. Wczytanie odpowiedzi
+2. Możliwe odpowiedzi się pojawiają na konsoli -OK
+3. Wczytanie odpowiedzi -OK
     a) Dobra 
-        - zapisuje firstAns[activeTeam] = score
-        - good.play()
-        - wyswietla poprawna odpowiedz i punkty
-        - dodaje score do roundScore i wyswietla go
+        - zapisuje firstAns[activeTeam] = score -OK
+        - good.play() -OK
+        - wyswietla poprawna odpowiedz i punkty -OK
+        - dodaje score do roundScore i wyswietla go -OK
 
     b) Zla 
-        - zapisuje firstAns[activeTeam] = 0
-        - wrong.play()
+        - zapisuje firstAns[activeTeam] = 0 
+        - wrong.play() -OK
         - wyświetla duzy X ?
-4. Przełączenie teamu
+4. Przełączenie teamu 
     a) Dobra (patrz 3a)
     b) Zla (patrz 3b)
 5. Porównanie odpowiedzi
@@ -21,41 +21,36 @@
         - zmienia team (ten co zaczynal)
         ... funkcja na zmiane pytajaca teamy ...
     b) W przec. wypadku
-        - wybiera wieksza wartosc
-        - zmienia team na ten z wieksza
+        - wybiera wieksza wartosc -OK
+        - zmienia team na ten z wieksza -OK
 6. (jeśli 5b) Wczytuje dalszą odpowiedź teamu
-    - wyczyszczenie X
+    - wyczyszczenie X ?
     a) Dobra
-        - dodaje punkty do roundScore i wyswietla go
-        - good.play()
-        - wyswietla poprawna odp i pkt
+        - dodaje punkty do roundScore i wyswietla go -OK
+        - good.play() -OK
+        - wyswietla poprawna odp i pkt -OK
     b) Zla
-        - wrong.play()
-        - errorScore[active]++
-        - wyswietla maly x
+        - wrong.play() -OK
+        - errorScore[active]++ -OK
+        - wyswietla maly x -OK
 
     *warunki stopu
-        i) errorScore[active] === 3
-            - zmienia activeTeam
+        i) errorScore[active] === 3 -OK
+            - zmienia activeTeam -OK
             m) Dobra
-                - good.play()
-                - wyswietla poprawna i roundScore
-                - teamPoints[active] += roundScore
+                - good.play() -OK
+                - wyswietla poprawna i roundScore -OK
+                - teamPoints[active] += roundScore -OK
                 - resetRound()
             n) Zla
                 - wyswietla duzy X
-                - wrong.play()
-                - zmienia active
-                - teamPoints[active] += roundScore
+                - wrong.play() -OK
+                - zmienia active -OK
+                - teamPoints[active] += roundScore -OK
                 - mozliwość wyświetlenia pozostałych odpowiedzi
-        j) *wszystkie odpowiedzi odgadnięte (w przeciwnym)
+        j) *wszystkie odpowiedzi odgadnięte
             - teamPoints[active] = roundScore
         - koniec_rundy.mp3
         - resetRound(roundScore, teamErr)
 
-
-
-
-*jeżeli po 3 błędach druga drużyna zgadnie cokolwiek zgarnia całą pulę
-*jeżeli nie zgadnie, duży błąd, przeciwnicy dostają pkty
 + wskaźnik activeTeam na ekranie

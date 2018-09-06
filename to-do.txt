@@ -30,31 +30,21 @@ brak:
 - pierwsza odpowiedz razem z wczytaniem activeTeam {
     po wyświetleniu pytania wczytuje activeTeam podany z klawiatury,
     jeżeli dobrze odp, to odpowiada drugi player, kto poda wyższą odpowiedź gra dalej
-    {
-       
-    }
 }
 
 DATA CONTROLLER
 - baza danych z pytaniami
 - odpowiedzi
 - punkty za odpowiedzi
-
-
-brak:
-
-- obliczanie punktów obu drużyn {
-    var teamScore[]
-    A. jeżeli roundScore = suma wszystkich pkt za odpowiedzi -> teamScore[] += roundScore
-}
-- dodawanie punktów - obsługa końca rundy
+- obliczanie punktów obu drużyn MOVE
 
 AUDIO CONTROLLER
 - bledna odpowiedz
+- poprawna odpowiedz
 
 brak:
 - intro
-- poprawna odpowiedz
+- suchar
 - koniec rundy/przerywnik
 - błąd
 
