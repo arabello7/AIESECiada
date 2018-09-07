@@ -5,13 +5,12 @@
 - ekran powitalny
 - wyświetlanie sumy pkt
 - resetowanie tablicy
+- wyświetlanie dużych X
 
 brak:
-- wyświetlanie dużych X
 - wyświetlanie pytania?
 - wyświetlanie aktywnej drużyny
 - wyświetlanie punktów obu drużyn
-
 
 CONSOLE CONTROLLER
 - wyswietlanie możliwych odpowiedzi

@@ -64,7 +64,7 @@ var consoleController = (function() {
             // After wrong answer
             if (ans === '-1') {
                 // First wrong answers
-                if (countPress < 2) {
+                if (countPress <= 2) {
                     screenController.showBigError();
                 } else {
                     screenController.showOneError();
@@ -111,7 +111,7 @@ var consoleController = (function() {
             } else if (countPress === 2) {
                 firstAns[activeTeam] = data[queNum].points[input];
                 //*moze jakies opoznienie do tego potem
-                screenController.resetErrors();
+//                screenController.resetErrors();
                 chooseTeam();
                 console.log('active: ' + activeTeam);
             } 
@@ -200,7 +200,7 @@ var screenController = (function() {
         // Big error
         showBigError : function () {
             var bigErr = '|\t|\n|\t|\n|\t|\n \\   /\n  |||\n /   \\ \n|\t|\n|\t|\n|\t|';
-//            audioController.playWrong();
+            audioController.playWrong();
             document.querySelector('.wrong-' + activeTeam + '-1').textContent = bigErr;
         },
         // Used after beginning of round, potem raczej duże X
@@ -247,6 +247,9 @@ document.querySelector('#btn-3').addEventListener('click', function(){
     answerButton(3);
 });
 document.querySelector('#btn-4').addEventListener('click', function(){
+    answerButton(4);
+});
+document.querySelector('#btn-x').addEventListener('click', function(){
     countPress++;
     consoleController.readAnswer(queNum,'-1');
 });
@@ -281,6 +284,7 @@ function roundOne(){
     console.log('active: ' + activeTeam);
     consoleController.printAnswers(queNum);
 }
+roundOne();
 
 function roundTwo(){
     screenController.resetRound();
@@ -288,6 +292,7 @@ function roundTwo(){
     //roundScore = 0;
 //    countPress = 0;
     queNum = 1;
+    activeTeam = 0;
     console.log('active: ' + activeTeam);
     consoleController.printAnswers(queNum);
 }
