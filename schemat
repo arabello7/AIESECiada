@@ -10,12 +10,12 @@
         - dodaje score do roundScore i wyswietla go -OK
 
     b) Zla 
-        - zapisuje firstAns[activeTeam] = 0 
+        - zapisuje firstAns[activeTeam] = 0 -OK (dostaje -1, tutaj może być błąd w porównaniu '-1' do liczby)
         - wrong.play() -OK
         - wyświetla duzy X ?
 4. Przełączenie teamu 
-    a) Dobra (patrz 3a)
-    b) Zla (patrz 3b)
+    a) Dobra (patrz 3a) -OK
+    b) Zla (patrz 3b) -OK
 5. Porównanie odpowiedzi
     a) Obie zle
         - zmienia team (ten co zaczynal)
@@ -51,6 +51,6 @@
         j) *wszystkie odpowiedzi odgadnięte
             - teamPoints[active] = roundScore
         - koniec_rundy.mp3
-        - resetRound(roundScore, teamErr)
+        - resetRound(roundScore, teamErr) -OK
 
 + wskaźnik activeTeam na ekranie
